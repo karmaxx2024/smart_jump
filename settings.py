@@ -1,4 +1,6 @@
 import main
+import pygame
+from main import jump_speed, horizontal_speed
 
 # Настройки экрана (разрешение как у смартфона в портретном режиме)
 screen_width, screen_height = 360, 640

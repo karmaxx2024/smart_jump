@@ -36,4 +36,4 @@ def draw_cloud(x, y):
             clouds[i] = (screen_width, random.randint(0, screen_height // 2))
 
     # Рисование земли
-    pygame.draw.rect(screen, green, (0, screen_height - 50, screen_width, 50)
+pygame.draw.rect(screen, green, (0, screen_height - 50, screen_width, 50))

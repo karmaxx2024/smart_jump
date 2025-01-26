@@ -1,6 +1,12 @@
 import main
+import random
+import pygame
+from settings import screen_width, screen_height, screen, brown, chicken_velocity_y
+
+brown = (139, 69, 19)         # Цвет для платформ
 
 # Настройки платформ
+
 platform_width = 120
 platform_height = 15
 platforms = []
@@ -28,8 +34,8 @@ def check_collision(rect, platforms):
     return None
 
     # Рисование платформ
-    for platform in platforms:
-        draw_platform(platform[0], platform[1])
+for platform in platforms:
+    draw_platform(platform[0], platform[1])
 
     # Удаление платформ, которые ушли за пределы экрана
     platforms = [platform for platform in platforms if platform[1] < screen_height]
