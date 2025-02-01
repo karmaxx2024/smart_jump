@@ -1,6 +1,19 @@
-import pygame
-from settings import screen_width, screen_height, screen, yellow, black, orange, platforms, check_collision
-import main
+
+
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__() # Вызов конструктора родительского класса (повторить констуркторы)
+        self.image = pygame.image.load(PLAYER_).convert_alpha()
+        self.rect = self.image.get_rect() # получаем прямоугольник для изображения
+        self.rect.centre = (x, y)
+        self.vel_y = 0
+        self.vel_x = 0
+        self.score = 0
+
+        self.jump_sound = pygame.mixer.Sound(SOUND_JUMP) # загружаем звук прыжка
+        self.jump_sound.set_volume()
+
 # Функция для рисования курицы
 def draw_chicken(x, y):
     # Тело курицы (маленький эллипс)

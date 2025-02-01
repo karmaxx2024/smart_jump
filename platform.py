@@ -1,7 +1,4 @@
-import main
-import random
-import pygame
-from settings import screen_width, screen_height, screen, brown, chicken_velocity_y
+
 
 brown = (139, 69, 19)         # Цвет для платформ
 

@@ -1,6 +1,4 @@
-import main
-import pygame
-from main import jump_speed, horizontal_speed
+
 
 # Настройки экрана (разрешение как у смартфона в портретном режиме)
 screen_width, screen_height = 360, 640
@@ -15,6 +13,19 @@ brown = (139, 69, 19)         # Цвет для платформ
 yellow = (255, 255, 0)        # Цвет для курицы
 orange = (255, 165, 0)        # Цвет для клюва и лап
 black = (0, 0, 0)             # Цвет для глаз
+
+#пути к изображениям
+PLAYER_IMAGE = 'assets/images/player.png'
+
+
+#пути к звукам
+SOUND_MENU = 'assets/sounds/background_music.mp3'
+SOUND_JUMP = 'assets/sounds/jumping_music.mp3'
+SOUND_BACKGROUND = 'assets/sounds/sounds/music_game1.mp3'
+
+#настройки звука
+music_volume = 0.5 #фоновая музыка
+sounds_volume = 0.7 #звуковые эффекты
 
 
 # Основной игровой цикл
