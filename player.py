@@ -1,82 +1,65 @@
-
-
+import pygame  # Импорт библиотеки Pygame для работы с графикой и событиями
+from settings import screen, screen_width, screen_height, PLAYER_IMAGE, SOUND_JUMP, jump_speed, gravity  # Импортируем настройки игры, такие как размеры экрана, цвета и гравитация
+from game_platform import platforms, check_collision  # Импортируем платформы и функции для работы с ними (например, проверку столкновений)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
-        super().__init__() # Вызов конструктора родительского класса (повторить констуркторы)
-        self.image = pygame.image.load(PLAYER_).convert_alpha()
-        self.rect = self.image.get_rect() # получаем прямоугольник для изображения
-        self.rect.centre = (x, y)
+        super().__init__()
+        self.image = pygame.image.load(PLAYER_IMAGE).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
         self.vel_y = 0
         self.vel_x = 0
-        self.score = 0
+        self.jump_sound = pygame.mixer.Sound(SOUND_JUMP)
+        self.jump_sound.set_volume(0.5)
 
-        self.jump_sound = pygame.mixer.Sound(SOUND_JUMP) # загружаем звук прыжка
-        self.jump_sound.set_volume()
+        # Проверяем, чтобы игрок стоял на платформе в начале игры
+        self.check_initial_platform()
+        print(f"✅ Игрок создан на ({self.rect.x}, {self.rect.y})")
 
-# Функция для рисования курицы
-def draw_chicken(x, y):
-    # Тело курицы (маленький эллипс)
-    pygame.draw.ellipse(screen, yellow, (x - 15, y - 25, 30, 40))
-    # Голова курицы (круг)
-    pygame.draw.circle(screen, yellow, (x, y - 35), 10)
-    # Глаза (два маленьких круга)
-    pygame.draw.circle(screen, black, (x - 5, y - 37), 3)
-    pygame.draw.circle(screen, black, (x + 5, y - 37), 3)
-    # Клюв (треугольник)
-    pygame.draw.polygon(screen, orange, [(x - 5, y - 32), (x + 5, y - 32), (x, y - 27)])
-    # Лапы (две линии)
-    pygame.draw.line(screen, orange, (x - 7, y + 15), (x - 12, y + 25), 3)
-    pygame.draw.line(screen, orange, (x + 7, y + 15), (x + 12, y + 25), 3)
+    def check_initial_platform(self):
+        for platform in platforms:
+            if platform[1] >= screen_height - 200:
+                self.rect.y = platform[1] - self.rect.height
+                print(f"✅ Игрок поставлен на платформу: ({self.rect.x}, {self.rect.y})")
+                return
 
-# Позиция и параметры курицы
-chicken_x = screen_width // 2
-chicken_y = screen_height - 100
-chicken_width = 30
-chicken_height = 40
-chicken_velocity_y = 0  # Скорость по вертикали
-chicken_velocity_x = 0  # Скорость по горизонтали
-gravity = 0.8  # Гравитация
-jump_speed = -15  # Скорость прыжка
-horizontal_speed = 5  # Скорость движения влево/вправо
-on_ground = True  # Находится ли курица на земле или платформе
-score = 0  # Счет
+    def move(self, keys):
+        if keys[pygame.K_LEFT]:
+            self.vel_x = -4
+            print("⬅️ Игрок движется влево")
+        elif keys[pygame.K_RIGHT]:
+            self.vel_x = 4
+            print("➡️ Игрок движется вправо")
+        else:
+            self.vel_x = 0
 
-# Применение гравитации
-chicken_velocity_y += gravity
-chicken_y += chicken_velocity_y
+    def apply_gravity(self):
+        self.vel_y += gravity
+        self.rect.y += self.vel_y
 
-# Применение горизонтального движения
-chicken_x += chicken_velocity_x
+    def check_collision(self):
+        platform_collided = check_collision(self.rect)
+        if platform_collided and self.vel_y >= 0:
+            self.rect.y = platform_collided.top - self.rect.height
+            self.vel_y = jump_speed  # Автоматический прыжок
+            print(f"🔄 Игрок прыгнул с платформы на ({self.rect.x}, {self.rect.y})")
 
-# Проверка коллизий с платформами
-chicken_rect = pygame.Rect(chicken_x - 15, chicken_y - 25, chicken_width, chicken_height)
-platform_collided = check_collision(chicken_rect, platforms)
+    def update(self, keys):
+        self.move(keys)
+        self.apply_gravity()
+        self.check_collision()
 
-if platform_collided:
-    chicken_y = platform_collided.top - chicken_height // 2
-    chicken_velocity_y = 0
-    on_ground = True
+        self.rect.x += self.vel_x
 
-# Проверка коллизии с землей
-if chicken_y + chicken_height // 2 >= screen_height - 50:
-    chicken_y = screen_height - 50 - chicken_height // 2
-    chicken_velocity_y = 0
-    on_ground = True
+        # Ограничиваем движение игрока в пределах экрана
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > screen_width:
+            self.rect.right = screen_width
 
-# Ограничение движения курицы по горизонтали
-if chicken_x < 0:
-    chicken_x = 0
-if chicken_x > screen_width:
-    chicken_x = screen_width
+        print(f"📍 Игрок на ({self.rect.x}, {self.rect.y})")
 
-# Прокрутка платформ вниз, если курица поднимается
-if chicken_y < screen_height // 2:
-    scroll = screen_height // 2 - chicken_y
-    chicken_y += scroll
-    for i in range(len(platforms)):
-        platforms[i] = (platforms[i][0], platforms[i][1] + scroll)
-    score += 1  # Увеличиваем счет на 1 за каждую прокрутку
-
-# Рисование курицы
-draw_chicken(chicken_x, chicken_y)
+    def draw(self):
+        screen.blit(self.image, self.rect)
