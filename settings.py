@@ -1,13 +1,28 @@
 import pygame  # Импорт библиотеки Pygame для работы с графикой и событиями
-
-# Инициализация Pygame
-pygame.init()
-pygame.font.init()
+import os
 
 # Настройки экрана
 screen_width, screen_height = 360, 640
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Smart Jump")
+
+# Путь к файлу с рекордом
+HIGH_SCORE_FILE = "high_score.txt"
+
+def load_high_score():
+    """Загружает рекорд из файла."""
+    if os.path.exists(HIGH_SCORE_FILE):
+        with open(HIGH_SCORE_FILE, "r") as file:
+            try:
+                return int(file.read())
+            except ValueError:
+                return 0
+    return 0
+
+def save_high_score(score):
+    """Сохраняет рекорд в файл."""
+    with open(HIGH_SCORE_FILE, "w") as file:
+        file.write(str(score))
 
 # Цвета
 light_blue = (173, 216, 230)  # Цвет для облаков
