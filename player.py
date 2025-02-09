@@ -16,22 +16,22 @@ class Player(pygame.sprite.Sprite):
 
         # Проверяем, чтобы игрок стоял на платформе в начале игры
         self.check_initial_platform()
-        print(f"✅ Игрок создан на ({self.rect.x}, {self.rect.y})")
+        print(f"Игрок создан на ({self.rect.x}, {self.rect.y})")
 
     def check_initial_platform(self):
         for platform in platforms:
             if platform[1] >= screen_height - 200:
                 self.rect.y = platform[1] - self.rect.height
-                print(f"✅ Игрок поставлен на платформу: ({self.rect.x}, {self.rect.y})")
+                print(f"Игрок поставлен на платформу: ({self.rect.x}, {self.rect.y})")
                 return
 
     def move(self, keys):
         if keys[pygame.K_LEFT]:
             self.vel_x = -4
-            print("⬅️ Игрок движется влево")
+            print("Игрок движется влево")
         elif keys[pygame.K_RIGHT]:
             self.vel_x = 4
-            print("➡️ Игрок движется вправо")
+            print("Игрок движется вправо")
         else:
             self.vel_x = 0
 
@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite):
         if platform_collided and self.vel_y >= 0:
             self.rect.y = platform_collided.top - self.rect.height
             self.vel_y = jump_speed  # Автоматический прыжок
-            print(f"🔄 Игрок прыгнул с платформы на ({self.rect.x}, {self.rect.y})")
+            print(f"Игрок прыгнул с платформы на ({self.rect.x}, {self.rect.y})")
 
     def update(self, keys):
         self.move(keys)
@@ -59,7 +59,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.right > screen_width:
             self.rect.right = screen_width
 
-        print(f"📍 Игрок на ({self.rect.x}, {self.rect.y})")
+        print(f"Игрок на ({self.rect.x}, {self.rect.y})")
 
     def draw(self):
         screen.blit(self.image, self.rect)

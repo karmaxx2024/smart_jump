@@ -2,7 +2,7 @@ import pygame  # Импорт библиотеки Pygame для работы с
 import random  # Импорт модуля random для генерации случайных чисел (например, для расположения платформ)
 from settings import screen, screen_width, screen_height, brown  # Импортируем настройки игры, такие как размеры экрана, цвета и гравитация
 
-platform_width = 120
+platform_width = 60
 platform_height = 15
 
 # Используем глобальный список платформ
@@ -17,14 +17,14 @@ def create_platform():
     x = random.randint(0, screen_width - platform_width)
     y = platforms[-1][1] - random.randint(80, 120) if platforms else screen_height - 50
     platforms.append((x, y))
-    print(f"✅ Создана платформа: ({x}, {y})")
-    log_debug(f"✅ Создана платформа: ({x}, {y})")
+    print(f"Создана платформа: ({x}, {y})")
+    log_debug(f"Создана платформа: ({x}, {y})")
 
 def create_starting_platforms():
     global platforms
     for i in range(5):
         create_platform()
-    log_debug(f"🎯 Итоговый список платформ: {platforms}")
+    log_debug(f"Итоговый список платформ: {platforms}")
 
 def get_platforms():
     return platforms
